@@ -190,6 +190,90 @@
             margin-bottom: 24px;/* and after the quote */
         }
 
+        /* --- Gallery Section --- */
+        #gallary {
+            background-color: #fafafa; /* 使用一個非常淺的灰色背景來區分區塊 */
+            color: #333; /* 確保此區塊內的文字顏色是深色，以便閱讀 */
+            padding: 100px 0;
+            overflow: hidden; /* 防止絕對定位的元素在動畫或縮放時溢出邊界 */
+        }
+
+        .gallery-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            min-height: 70vh; /* 確保容器有足夠的高度來容納絕對定位的元素 */
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .central-visual {
+            position: relative;
+            width: 40%; /* 主視覺佔容器寬度的 40% */
+            max-width: 400px; /* 但最大不超過 400px */
+            z-index: 2; /* 確保主視覺在周圍框架之上 */
+        }
+
+        .central-visual img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #gallery-character {
+            position: absolute;
+            width: 60%; /* 角色圖案相對於建築物背景的大小 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 將角色圖案精確置中在建築物上 */
+        }
+
+        .gallery-frame {
+            position: absolute;
+            width: 20%; /* 周圍框架的寬度 */
+            max-width: 200px; /* 最大寬度 */
+            background: white;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1; /* 在主視覺之下 */
+            transition: transform 0.3s ease; /* 為 JS 的 scale 變化添加平滑過渡 */
+        }
+
+        .gallery-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 讓圖片填滿框架，多餘部分會被裁剪，但圖片比例不變 */
+            display: block;
+        }
+
+        /* 使用百分比定位四個框架，使其能隨容器大小縮放 */
+        #frame-a { top: 5%; left: 10%; }
+        #frame-b { top: 5%; right: 10%; }
+        #frame-c { bottom: 5%; left: 10%; }
+        #frame-d { bottom: 5%; right: 10%; }
+        #frame-e { top: 35%; left: 0%; }
+        #frame-f { top: 35%; right: 0%; }
+
+        /* 響應式設計 (RWD) for mobile */
+        @media (max-width: 768px) {
+            .gallery-container { min-height: 120vh; display: block; }
+            .central-visual { width: 60%; margin: 20% auto 0; }
+            .gallery-frame { width: 35%; }
+            #frame-a { top: 5%; left: 5%; }
+            #frame-b { top: 5%; right: 5%; }
+            #frame-c { bottom: 5%; left: 5%; }
+            #frame-d { bottom: 5%; right: 5%; }
+            #frame-e { top: 35%; left: 5%; }
+            #frame-f { top: 35%; right: 5%; }
+        }
 
         footer {
             width: 100%;
@@ -388,7 +472,26 @@
         </div>
         </section>
         
-        <!-- Add more sections here if needed -->
+        <section id="gallary" class="content-section">
+            <div class="gallery-wrapper">
+                <h1>GALLARY</h1>
+                <div class="gallery-container">
+                    <!-- 中央主視覺 -->
+                    <div class="central-visual">
+                        <!-- 請確保您有 'images/gallary_01.png' 和 'images/gallary_02.png' 這兩個檔案 -->
+                        <img src="images/gallary_01.png" alt="建築物背景" id="gallery-building">
+                        <img src="images/gallary_02.png" alt="角色圖案" id="gallery-character">
+                    </div>
+                    <!-- 四個周圍的圖片框架 (A, B, C, D) -->
+                    <div class="gallery-frame" id="frame-a"><img src="" alt="隨機圖片A"></div>
+                    <div class="gallery-frame" id="frame-b"><img src="" alt="隨機圖片B"></div>
+                    <div class="gallery-frame" id="frame-c"><img src="" alt="隨機圖片C"></div>
+                    <div class="gallery-frame" id="frame-d"><img src="" alt="隨機圖片D"></div>
+                    <div class="gallery-frame" id="frame-e"><img src="" alt="隨機圖片E"></div>
+                    <div class="gallery-frame" id="frame-f"><img src="" alt="隨機圖片F"></div>
+                </div>
+            </div>
+        </section>
     </main>
     
     <footer>
@@ -499,6 +602,51 @@
                     el.style.opacity = charFadeProgress;
                 });
             });
+
+            // --- Gallery Section Logic ---
+            const setupGallery = () => {
+                // 圖片總數 (img_1.jpg to img_30.jpg)
+                const totalImages = 8;
+                // 需要產生的圖片數量 (對應 A, B, C, D 四個框架)
+                const numFrames = 6;
+                // 獲取所有圖片框架的 DOM 元素
+                const frames = document.querySelectorAll('.gallery-frame');
+
+                // 如果找不到任何框架，就提前結束函式，避免錯誤
+                if (frames.length === 0) { return; }
+
+                // 1. 產生 4 個不重複的隨機數字 (1-30)
+                const randomIndexes = new Set();
+                while (randomIndexes.size < numFrames) {
+                    // 產生 1 到 30 之間的隨機整數
+                    const randomIndex = Math.floor(Math.random() * totalImages) + 1;
+                    randomIndexes.add(randomIndex);
+                }
+                // 將 Set 轉換為 Array 以便按順序讀取
+                const uniqueIndexes = Array.from(randomIndexes);
+
+                // 2. 將隨機圖片和隨機大小應用到各個框架上
+                frames.forEach((frame, index) => {
+                    if (uniqueIndexes[index]) {
+                        const imgElement = frame.querySelector('img');
+                        
+                        // a. 設置圖片來源
+                        imgElement.src = `images/img_${uniqueIndexes[index]}.webp`;
+                        imgElement.alt = `隨機展示圖片 ${uniqueIndexes[index]}`;
+
+                        // b. 產生 0.8 到 1.2 之間的隨機縮放比例
+                        const randomScale = Math.random() * (1.8 - 0.8) + 0.8;
+                        
+                        // c. 應用隨機縮放效果 (toFixed(2) 將數字格式化為兩位小數)
+                        frame.style.transform = `scale(${randomScale.toFixed(2)})`;
+                    }
+                });
+            };
+
+            // 確保 gallary 區塊存在於頁面上時才執行初始化函式
+            if (document.getElementById('gallary')) {
+                setupGallery();
+            }
         });
     </script>
 </body>
