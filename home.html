@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micebox Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            /* The base background is now an image, with a dark blue fallback. */
+            background-color: rgb(115, 162, 169); /* 單純的深藍色背景 */
+            /* 移除背景圖片，讓湖水藍覆蓋層來控制背景色的漸變 */
+            color: white; /* Default text color */
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 48px;
+            margin-bottom: 80px; /* 增加標題與下方內容的間距 */
+        }
+
+        h2 {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 16px;
+        }
+
+        h3 {
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: 16px; /* 增加標題與下方內容的間距 */
+        }
+
+        .lake-blue-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(159, 203, 210); /* Lake Blue */
+            z-index: -1; /* Position it behind content but over the body background image */
+            opacity: 0; /* Start fully transparent */
+        }
+
+        .container {
+            max-width: 1366px;
+            margin: 0 auto;
+            padding: 0 32px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header specific styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px 320px; /* header padding */
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0); /* Transparent header */
+            transition: background-color 0.3s ease;
+        }
+
+        .logo img {
+            width: 70%;
+            height: auto;
+            display: block;
+        }
+        
+        .main-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .main-nav li {
+            margin-left: 8px;
+        }
+
+        .main-nav li a {
+            text-decoration: none;
+            color: #946A61;
+            font-weight: 700;
+            padding: 8px 12px;
+            font-size: 24px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .main-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-icons {
+            display: flex;
+            margin-left: 24px;
+        }
+
+        .header-icons a {
+            display: block;
+            width: 48px;
+            height: 48px;
+            margin-left: 4px;
+        }
+
+        .header-icons img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            height: 100vh; /* Full viewport height */
+            background-image: url('images/hero_01.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 100px 0;
+            text-align: center;
+            background: transparent; /* Ensure sections are transparent */
+            position: relative;
+        }
+        
+        #brand-intro {
+             height: 200vh; /* 縮短滾動高度，讓動畫更快結束 */
+             position: relative; /* 為子元素的絕對定位提供基準 */
+        }
+
+        #brand-intro .content-box {
+            position: absolute;
+            top: 50vh; /* 初始位置設定在視窗垂直置中的地方 */
+            left: 50%;
+            transform: translate(-50%, -50%); /* 水平與垂直置中 */
+            width: 100%; /* 確保寬度正確 */
+            max-width: 800px;
+        }
+        
+        #character-intro .content-box {
+            max-width: 800px;
+            margin: 0 auto 64px; /* 增加標題與下方卡片的間距 (64px) */
+        }
+        
+        #character-intro {
+            padding-top: 0; /* 移除頂部內邊距，使標題文字上移 64px */
+            background: transparent; /* Ensure it is also transparent */
+        }
+        
+        /* 為角色介紹區塊的內容設定初始透明度，以配合JS的淡入效果 */
+        #character-intro .content-box,
+        #character-intro .character-cards-container {
+            opacity: 0;
+        }
+
+        .content-section p {
+            line-height: 1.8;
+        }
+        
+        .js-fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        /* Spacing for brand intro text */
+        #brand-intro .content-box h2 {
+            margin-top: 0;
+            margin-bottom: 12px; /* Add a small, consistent space after each line */
+        }
+        #brand-intro .content-box h3 {
+            margin-top: 24px;   /* Add more space before the quote */
+            margin-bottom: 24px;/* and after the quote */
+        }
+
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: #fff;
+            position: relative;
+            z-index: 100;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+        
+        .character-cards-container {
+            max-width: 1366px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .character-card {
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .character-card-image {
+            max-width: 60%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .character-card h2 {
+            margin-bottom: 5px;
+        }
+
+        .character-card p {
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #ccc;
+        }
+
+        /* New styles for parallax section */
+        .parallax-section {
+            position: relative; /* Establish positioning context */
+            height: 500px; /* Or whatever height is desired for this section */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-position: center 20%;
+        }
+
+        .parallax-section .parallax-text {
+            z-index: 3; /* Above both images */
+            color: white; /* Or any contrasting color */
+            font-size: 2em;
+            margin-bottom: 20px; /* Space between text and images */
+        }
+
+        .parallax-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: flex-start; /* Align to left */
+            align-items: center; /* Align to middle vertically */
+            z-index: 1; /* Below text, above background */
+        }
+
+        .parallax-container .parallax-mice {
+            position: relative; /* To be positioned within parallax-container */
+            width: 30%; /* Adjust size as needed */
+            height: auto;
+            left: 15%; /* Adjust to be middle-left, roughly */
+            z-index: 2; /* On top of the background image */
+        }
+    </style>
+</head>
+<body>
+    <div class="lake-blue-overlay"></div>
+    <header class="navbar">
+        <div class="logo"><img src="images/logo.png" alt="Brand Logo"></div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#">Menu 1</a></li>
+                <li><a href="#">Menu 2</a></li>
+                <li><a href="#">Menu 3</a></li>
+                <li><a href="#">Menu 4</a></li>
+            </ul>
+            <div class="header-icons">
+                <a href="#"><img src="images/icon_ig.svg" alt="Instagram"></a>
+                <a href="#"><img src="images/icon_fb.svg" alt="Facebook"></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section"></section>
+
+        <section id="brand-intro" class="content-section">
+            <div class="content-box">
+                <h1>品牌介紹</h1>
+                <h3>鼠鼠 (MICE) 和動物小夥伴的快樂日常</h3>
+                <P></P>
+                <h3>一起想著今天要吃什麼，</h3>
+                <h3>一起尋找野餐的最佳地點，</h3>
+                <h3>一起發現藏在日常中的小幸福。</h3>
+                <P></P>
+                <h3>用療癒的原創插畫陪伴著</h3>
+                <h3>希望每一次相遇，都能帶給你一點點快樂。</h3>
+                <P></P>
+                <h3>『 Have a mice day! 』</h3> 
+                <P></P>
+                <h3>有鼠，就是好日。</h3>
+            </div>
+        </section>
+
+       <section id="character-intro" class="content-section">
+             <div class="content-box">
+                 <h1>角色介紹</h1>
+             </div>
+        <div class="character-cards-container">
+            <!-- Character Card: MICE -->
+            <div class="character-card">
+                <img src="images/character_mice.webp" alt="MICE" class="character-card-image">
+                <h3>鼠鼠 MICE</h3>
+                <h2>無厘頭又搞笑的倉鼠</h2>
+                <h2>努力探索世界中!</h2>
+            </div>
+
+            <!-- Character Card: HAKO -->
+            <div class="character-card">
+                <img src="images/character_hako.webp" alt="HAKO" class="character-card-image">
+                <h3>肌肉鼠 HAKO</h3>
+                <h2>體格強壯的倉鼠同伴</h2>
+                <h2>喜歡製作甜點!</h2>
+            </div>
+
+            <!-- Character Card: MUMU -->
+            <div class="character-card">
+                <img src="images/character_mumu.webp" alt="MUMU" class="character-card-image">
+                <h3>玄鳳鸚鵡 MUMU</h3>
+                <h2>時尚大師(自稱)</h2>
+                <h2>擁有一頭華麗的髮型!</h2>
+            </div>
+
+            <!-- Character Card: RAKO -->
+            <div class="character-card">
+                <img src="images/character_rako.webp" alt="RAKO" class="character-card-image">
+                <h3>海獺 RAKO</h3>
+                <h2>在陸地會迷路的海獺</h2>
+                <h2>尾巴看起來很蓬鬆!</h2>
+            </div>
+            <!-- Character Card: MICE -->
+            <div class="character-card">
+                <img src="images/character_mice.webp" alt="MICE" class="character-card-image">
+                <h3>鼠鼠 MICE</h3>
+                <h2>無厘頭又搞笑的倉鼠</h2>
+                <h2>努力探索世界中!</h2>
+            </div>
+
+            <!-- Character Card: HAKO -->
+            <div class="character-card">
+                <img src="images/character_hako.webp" alt="HAKO" class="character-card-image">
+                <h3>肌肉鼠 HAKO</h3>
+                <h2>體格強壯的倉鼠同伴</h2>
+                <h2>喜歡製作甜點!</h2>
+            </div>
+
+            <!-- Character Card: MUMU -->
+            <div class="character-card">
+                <img src="images/character_mumu.webp" alt="MUMU" class="character-card-image">
+                <h3>玄鳳鸚鵡 MUMU</h3>
+                <h2>時尚大師(自稱)</h2>
+                <h2>擁有一頭華麗的髮型!</h2>
+            </div>
+
+            <!-- Character Card: RAKO -->
+            <div class="character-card">
+                <img src="images/character_rako.webp" alt="RAKO" class="character-card-image">
+                <h3>海獺 RAKO</h3>
+                <h2>在陸地會迷路的海獺</h2>
+                <h2>尾巴看起來很蓬鬆!</h2>
+                
+            </div>
+        </div>
+        </section>
+        
+        <!-- Add more sections here if needed -->
+    </main>
+    
+    <footer>
+        <p class="copyright"></p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 自動更新版權年份 ---
+            const copyrightElement = document.querySelector('.copyright');
+            if (copyrightElement) {
+                const currentYear = new Date().getFullYear();
+                copyrightElement.textContent = `© Copyright 鼠鼠盒子 MICEBOX ${currentYear}`;
+            }
+
+            // --- 視差滾動效果 ---
+            const brandIntroSection = document.querySelector('#brand-intro'); // 獲取品牌介紹區塊
+            const characterIntroSection = document.querySelector('#character-intro');
+            const brandIntroContent = brandIntroSection.querySelector('.content-box');
+            const lakeBlueOverlay = document.querySelector('.lake-blue-overlay');
+            // 獲取角色介紹區塊中所有需要淡入的元素（標題和卡片）
+            const characterIntroElements = characterIntroSection.querySelectorAll('.content-box, .character-cards-container');
+
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                const brandTop = brandIntroSection.offsetTop;
+                const brandHeight = brandIntroSection.offsetHeight;
+                const brandContentHeight = brandIntroContent.offsetHeight;
+                const viewportHeight = window.innerHeight;
+
+                // 當品牌介紹區塊可見時，效果的活動滾動持續時間發生。
+                const scrollStart = brandTop;
+                const scrollEnd = brandTop + brandHeight - viewportHeight;
+                const scrollDistance = scrollEnd - scrollStart;
+
+                // 這是滾動區塊的原始進度，從 0 到 1。
+                let rawProgress = scrollDistance > 0 ? (scrollY - scrollStart) / scrollDistance : 0;
+                rawProgress = Math.max(0, Math.min(1, rawProgress)); // 將值限制在 0 和 1 之間
+
+                // --- 1. 品牌介紹文字釘選效果 ---
+                const pinEndProgress = 0.9; // 在 90% 進度時解除釘選，延長停留時間
+
+                if (rawProgress > 0 && rawProgress < pinEndProgress) {
+                    // 釘選中：將元素固定在視窗中央
+                    brandIntroContent.style.position = 'fixed';
+                    brandIntroContent.style.top = '50%';
+                    brandIntroContent.style.left = '50%';
+                    brandIntroContent.style.transform = 'translate(-50%, -50%)';
+                } else if (rawProgress >= pinEndProgress) {
+                    // 解除釘選：將元素絕對定位於父元素內，使其可以跟著向上滾動
+                    brandIntroContent.style.position = 'absolute';
+                    // 計算新的 top 值，使其從釘選位置無縫過渡，並保持 transform 一致性
+                    const topOffset = (scrollDistance * pinEndProgress) + (viewportHeight / 2);
+                    brandIntroContent.style.top = `${topOffset}px`;
+                    brandIntroContent.style.left = '50%';
+                    // 保持 transform 與釘選狀態一致，避免跳動
+                    brandIntroContent.style.transform = 'translate(-50%, -50%)';
+                } else {
+                    // 釘選前：恢復預設樣式
+                    brandIntroContent.style.position = '';
+                    brandIntroContent.style.top = '';
+                    brandIntroContent.style.left = '';
+                    brandIntroContent.style.transform = '';
+                }
+                
+                // --- 1b. 品牌介紹文字淡出效果 ---
+                const textFadeOutStart = 0.5; // 與背景開始變藍時間點對齊
+                const textFadeOutEnd = 0.9;   // 與背景變藍完成時間點對齊，讓文字在此時完全淡出
+
+                let textOpacity = 1;
+                if (rawProgress > textFadeOutStart) {
+                    // 計算淡出進度 (從 0 到 1，發生在 0.3 到 0.5 之間)
+                    let fadeProgress = (rawProgress - textFadeOutStart) / (textFadeOutEnd - textFadeOutStart);
+                    fadeProgress = Math.max(0, Math.min(1, fadeProgress)); // 確保進度在 0-1 之間
+                    textOpacity = 1 - fadeProgress;
+                }
+                brandIntroContent.style.opacity = textOpacity;
+
+                // --- 2. 湖水藍覆蓋層動畫 ---
+                const bgFadeInStart = 0.5;  // 10% 進度時開始淡入
+                const bgFadeInEnd = 0.8;    // 30% 進度時完成淡入
+
+                let overlayOpacity = 0;
+
+                if (rawProgress > bgFadeInStart && rawProgress <= bgFadeInEnd) {
+                    // 階段一：淡入
+                    overlayOpacity = (rawProgress - bgFadeInStart) / (bgFadeInEnd - bgFadeInStart);
+                } else if (rawProgress > bgFadeInEnd) {
+                    // 階段二：完全可見並保持
+                    overlayOpacity = 1;
+                }
+
+                if (lakeBlueOverlay) {
+                    lakeBlueOverlay.style.opacity = Math.max(0, Math.min(1, overlayOpacity));
+                }
+
+                // --- 3. 角色介紹淡入效果 ---
+                const charTop = characterIntroSection.offsetTop;
+                // 優化轉場：當角色介紹區塊的頂部觸及視窗底部時開始淡入，
+                // 進入視窗 20% 時完全可見，實現無縫銜接。
+                const charFadeInStart = charTop - viewportHeight;
+                const charFadeInEnd = charTop - (viewportHeight * 0.5); // 讓淡入在角色區塊進入視窗一半時完成
+
+                let charFadeProgress = (scrollY - charFadeInStart) / (charFadeInEnd - charFadeInStart);
+                charFadeProgress = Math.max(0, Math.min(1, charFadeProgress * 1.5)); // 稍微加速淡入效果
+
+                characterIntroElements.forEach(el => {
+                    el.style.opacity = charFadeProgress;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
