@@ -217,8 +217,8 @@
 
         .central-visual {
             position: relative;
-            width: 40%; /* 主視覺佔容器寬度的 40% */
-            max-width: 400px; /* 但最大不超過 400px */
+            width: 60%; /* 主視覺佔容器寬度的 60% */
+            max-width: 512px; /* 但最大不超過 600px */
             z-index: 2; /* 確保主視覺在周圍框架之上 */
         }
 
@@ -233,7 +233,9 @@
             width: 60%; /* 角色圖案相對於建築物背景的大小 */
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* 將角色圖案精確置中在建築物上 */
+            transform: translate(-50%, calc(-50% + 80px)); /* 將角色圖案精確置中在建築物上，並向下移動 64px */
+            transition: transform 0.3s ease; /* 為懸停效果添加平滑過渡 */
+            cursor: pointer; /* 將滑鼠指針變為手形，提示可點擊 */
         }
 
         .gallery-frame {
@@ -254,6 +256,69 @@
             display: block;
         }
 
+        #gallery-character:hover {
+            transform: translate(-50%, calc(-50% + 80px)) scale(1.1); /* 懸停時放大 20% */
+        }
+
+        /* --- 漫畫風格對話框 --- */
+        .comic-speech-bubble {
+            /* 1. 定位在角色圖案左上方 */
+            position: absolute;
+            top: 18%; /* 稍微向上調整位置 */
+            left: 15%;
+            z-index: 3; /* 確保在角色圖案之上 */
+
+            /* 新增：向下移動48px並旋轉-15度 */
+            transform: translateX(-64px) translateY(80px) rotate(-15deg);
+
+            /* 2. 本體形狀 & 文字 (調整為更圓潤的形狀) */
+            display: inline-flex;
+            flex-direction: column; /* 讓文字垂直排列 */
+            align-items: center;
+            justify-content: center;
+            padding: 20px 35px; /* 增加內邊距，使其更圓潤，達成2:1的視覺比例 */
+            background-color: white;
+            border-radius: 45px; /* 使用固定圓角值，使其更像橢圓而非膠囊 */
+            color: #333;
+            
+            /* 3. 讓對話框不干擾滑鼠事件 (例如懸停、點擊) */
+            pointer-events: none;
+
+            /* 4. 關鍵：使用 drop-shadow 讓陰影能包覆本體與尖角 */
+            filter: drop-shadow(4px 5px 3px rgba(0, 0, 0, 0.2));
+            
+            /* 5. 確保文字不會因寬度限制而換行 */
+            white-space: nowrap;
+        }
+
+        .bubble-main-text {
+            font-weight: bold;
+            font-size: 1.5rem; /* CLICK! 的字體大小 */
+            line-height: 1; /* 避免過大的行高影響佈局 */
+        }
+
+        .bubble-sub-text {
+            font-size: 0.75rem; /* 1.5rem 的 50% */
+            font-weight: normal; /* 使用正常字重以作區分 */
+            margin-top: 6px; /* 與主文字的間距 */
+        }
+
+        .comic-speech-bubble::after {
+            content: '';
+            position: absolute;
+            
+            /* 尖角位置：在對話框底部，並偏向右下，指向角色 */
+            bottom: -12px; /* 配合更大的對話框調整 */
+            right: 40%;
+
+            /* 用 border 技巧畫出不對稱三角形 (也稍微放大) */
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 20px solid white; /* 顏色需與本體背景色相同 */
+        }
+
         /* 使用百分比定位四個框架，使其能隨容器大小縮放 */
         #frame-a { top: 5%; left: 10%; }
         #frame-b { top: 5%; right: 10%; }
@@ -265,7 +330,7 @@
         /* 響應式設計 (RWD) for mobile */
         @media (max-width: 768px) {
             .gallery-container { min-height: 120vh; display: block; }
-            .central-visual { width: 60%; margin: 20% auto 0; }
+            .central-visual { width: 90%; margin: 20% auto 0; }
             .gallery-frame { width: 35%; }
             #frame-a { top: 5%; left: 5%; }
             #frame-b { top: 5%; right: 5%; }
@@ -385,7 +450,7 @@
 
         <section id="brand-intro" class="content-section">
             <div class="content-box">
-                <h1>品牌介紹</h1>
+                <h1>ABOUT</h1>
                 <h3>鼠鼠 (MICE) 和動物小夥伴的快樂日常</h3>
                 <P></P>
                 <h3>一起想著今天要吃什麼，</h3>
@@ -403,7 +468,7 @@
 
        <section id="character-intro" class="content-section">
              <div class="content-box">
-                 <h1>角色介紹</h1>
+                 <h1>CHARACTER</h1>
              </div>
         <div class="character-cards-container">
             <!-- Character Card: MICE -->
@@ -474,13 +539,18 @@
         
         <section id="gallary" class="content-section">
             <div class="gallery-wrapper">
-                <h1>GALLARY</h1>
+                <h1>ARTWORK</h1>
                 <div class="gallery-container">
                     <!-- 中央主視覺 -->
                     <div class="central-visual">
                         <!-- 請確保您有 'images/gallary_01.png' 和 'images/gallary_02.png' 這兩個檔案 -->
-                        <img src="images/gallary_01.png" alt="建築物背景" id="gallery-building">
-                        <img src="images/gallary_02.png" alt="角色圖案" id="gallery-character">
+                        <img src="images/gallary_01.webp" alt="建築物背景" id="gallery-building">
+                        <img src="images/gallary_02.webp" alt="角色圖案" id="gallery-character">
+                        <!-- 漫畫風格對話框 -->
+                        <div class="comic-speech-bubble">
+                            <div class="bubble-main-text">CLICK!</div>
+                            <div class="bubble-sub-text">看更多作品!</div>
+                        </div>
                     </div>
                     <!-- 四個周圍的圖片框架 (A, B, C, D) -->
                     <div class="gallery-frame" id="frame-a"><img src="" alt="隨機圖片A"></div>
@@ -646,6 +716,12 @@
             // 確保 gallary 區塊存在於頁面上時才執行初始化函式
             if (document.getElementById('gallary')) {
                 setupGallery();
+
+                // 為 gallery-character 圖片添加點擊事件，以重新整理畫廊
+                const galleryCharacter = document.getElementById('gallery-character');
+                if (galleryCharacter) {
+                    galleryCharacter.addEventListener('click', setupGallery);
+                }
             }
         });
     </script>
