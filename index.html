@@ -18,9 +18,10 @@
         }
 
         h1 {
+            font-family: sans-serif;
             font-weight: 700;
             font-size: 48px;
-            margin-bottom: 80px; /* 增加標題與下方內容的間距 */
+            margin-bottom: 32px; /* 增加標題與下方內容的間距 */
         }
 
         h2 {
@@ -72,7 +73,7 @@
         }
 
         .logo img {
-            width: 70%;
+            width: 50%;
             height: auto;
             display: block;
         }
@@ -98,7 +99,7 @@
             color: #946A61;
             font-weight: 700;
             padding: 8px 12px;
-            font-size: 24px;
+            font-size: 18px;
             border-radius: 4px;
             transition: background-color 0.3s ease;
         }
@@ -114,8 +115,8 @@
 
         .header-icons a {
             display: block;
-            width: 48px;
-            height: 48px;
+            width: 32px;
+            height: 32px;
             margin-left: 4px;
         }
 
@@ -142,7 +143,7 @@
         }
         
         #brand-intro {
-             height: 200vh; /* 縮短滾動高度，讓動畫更快結束 */
+             height: 100vh; /* 縮短滾動高度，讓動畫更快結束 */
              position: relative; /* 為子元素的絕對定位提供基準 */
         }
 
@@ -165,12 +166,6 @@
             background: transparent; /* Ensure it is also transparent */
         }
         
-        /* 為角色介紹區塊的內容設定初始透明度，以配合JS的淡入效果 */
-        #character-intro .content-box,
-        #character-intro .character-cards-container {
-            opacity: 0;
-        }
-
         .content-section p {
             line-height: 1.8;
         }
@@ -327,6 +322,101 @@
         #frame-e { top: 35%; left: 0%; }
         #frame-f { top: 35%; right: 0%; }
 
+        /* --- Goods Section --- */
+        #goods {
+            position: relative; /* For pseudo-element positioning */
+            overflow: hidden; /* To contain the pseudo-element */
+            background-color: #fafafa; /* A light base color */
+            color: #333;
+        }
+
+        #goods::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120%;
+            height: 120%;
+            background-image: url('images/goods_fugure.webp');
+            background-size: auto 90%; /* Adjust size: height is 90% of section, width is auto */
+            background-position: left center; /* Align to the left */
+            background-repeat: no-repeat;
+ 
+        }
+
+        .goods-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 256px);
+            gap: 32px;
+            justify-content: center; /* Center the 3-column grid in the container */
+            margin-top: 20px;
+        }
+
+        .goods-item {
+            position: relative; /* Context for absolute positioned images */
+            width: 256px;
+            height: 256px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .goods-item img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 240px;  /* 256px container - 8px padding on each side */
+            height: 240px; /* 256px container - 8px padding on each side */
+            object-fit: cover;
+            transition: opacity 0.4s ease;
+        }
+
+        .goods-item .goods-image-hover {
+            opacity: 0;
+        }
+
+        .goods-item:hover .goods-image-hover {
+            opacity: 1;
+        }
+
+        .goods-cta-container {
+            text-align: center;
+            margin-top: 64px;
+            position: relative; /* Ensure it's above the pseudo-element background */
+        }
+
+        .goods-cta-text {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            font-family: 'Zen Maru Gothic', sans-serif;
+        }
+
+        .btn-capsule {
+            padding: 16px 48px;
+            border-radius: 50px; /* Capsule shape */
+        }
+
+        .btn-lake-green {
+            background-color: rgb(115, 162, 169);
+            color: white;
+            font-size: 20px;
+        }
+
+        .btn-lake-green:hover {
+            background-color: rgb(95, 142, 149); /* Darker shade for hover */
+        }
+
         /* 響應式設計 (RWD) for mobile */
         @media (max-width: 768px) {
             .gallery-container { min-height: 120vh; display: block; }
@@ -338,6 +428,13 @@
             #frame-d { bottom: 5%; right: 5%; }
             #frame-e { top: 35%; left: 5%; }
             #frame-f { top: 35%; right: 5%; }
+
+            .goods-grid {
+                grid-template-columns: 2fr; /* 手機版改為2欄顯示 */
+                gap: 24px;
+                max-width: 256px; /* 讓單欄網格置中 */
+                margin: 4px auto 0;
+            }
         }
 
         footer {
@@ -386,6 +483,87 @@
             font-size: 1rem;
             line-height: 1.4;
             color: #ccc;
+        }
+
+        /* --- Link Section --- */
+        #link {
+            background-color: #fafafa; /* Match other light sections */
+            color: #333;
+        }
+
+        .link-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 0; /* Remove space between buttons */
+            margin-top: 48px; /* Space below the h1 */
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+        }
+
+        .link-button {
+            display: flex; /* Use flexbox for centering */
+            align-items: center; /* Vertically center */
+            justify-content: center; /* Horizontally center */
+            width: 200px;
+            height: 80px;
+            border: 2px solid black;
+            box-sizing: border-box; /* Ensure border is included in the dimensions */
+            padding: 0;
+            background-color: white; /* Give it a background */
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* Remove underline from link */
+            color: #333; /* Set text color */
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .link-button:hover {
+            background-color: #f0f0f0; /* Simple hover effect */
+        }
+
+        /* --- Image Carousel for Brand Intro --- */
+        .carousel-container {
+            position: absolute;
+            bottom: 50px; /* Position it a bit up from the bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px; /* Set a fixed width of 600px */
+            max-width: 90vw; /* Ensure it doesn't overflow on smaller screens */
+            height: 200px; /* Adjust height as needed */
+            overflow: hidden;
+            /* Creates the 50px fade-out effect on the left and right edges */
+            -webkit-mask-image: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
+            mask-image: linear-gradient(to right, transparent, black 50px, black calc(100% - 50px), transparent);
+        }
+
+        .carousel-track {
+            display: flex;
+            /* 5 images * 250px width * 2 for duplication */
+            width: calc(250px * 10); 
+            animation: scroll 25s linear infinite;
+        }
+
+        .carousel-slide {
+            width: 250px; /* Fixed width for each slide */
+            height: 200px; /* Match container height */
+            flex-shrink: 0;
+            padding: 0 10px; /* Spacing between images */
+            box-sizing: border-box;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(calc(-250px * 5));
+            }
         }
 
         /* New styles for parallax section */
@@ -463,6 +641,13 @@
                 <h3>『 Have a mice day! 』</h3> 
                 <P></P>
                 <h3>有鼠，就是好日。</h3>
+            </div>
+
+            <!-- Image Carousel -->
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <!-- Slides are dynamically generated by JavaScript -->
+                </div>
             </div>
         </section>
 
@@ -549,7 +734,7 @@
                         <!-- 漫畫風格對話框 -->
                         <div class="comic-speech-bubble">
                             <div class="bubble-main-text">CLICK!</div>
-                            <div class="bubble-sub-text">看更多作品!</div>
+                            <div class="bubble-sub-text">點雕像看更多作品!</div>
                         </div>
                     </div>
                     <!-- 四個周圍的圖片框架 (A, B, C, D) -->
@@ -559,6 +744,60 @@
                     <div class="gallery-frame" id="frame-d"><img src="" alt="隨機圖片D"></div>
                     <div class="gallery-frame" id="frame-e"><img src="" alt="隨機圖片E"></div>
                     <div class="gallery-frame" id="frame-f"><img src="" alt="隨機圖片F"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="goods" class="content-section">
+            <div class="container">
+                <h1>鼠鼠陪伴你療癒的每一天</h1>
+                <div class="goods-grid">
+                    <!-- Goods Item 1 -->
+                    <div class="goods-item">
+                        <img src="images/goods_tape01.webp" alt="商品範例 1" class="goods-image-default">
+                        <img src="images/goods_tape02.webp" alt="商品範例 1 - 懸停" class="goods-image-hover">
+                    </div>
+                    <!-- Goods Item 2 -->
+                    <div class="goods-item">
+                        <img src="images/goods_tape01.webp" alt="商品範例 2" class="goods-image-default">
+                        <img src="images/goods_tape02.webp" alt="商品範例 2 - 懸停" class="goods-image-hover">
+                    </div>
+                    <!-- Goods Item 3 -->
+                    <div class="goods-item">
+                        <img src="images/goods_tape01.webp" alt="商品範例 3" class="goods-image-default">
+                        <img src="images/goods_tape02.webp" alt="商品範例 3 - 懸停" class="goods-image-hover">
+                    </div>
+                    <!-- Goods Item 4 -->
+                    <div class="goods-item">
+                        <img src="images/goods_tape01.webp" alt="商品範例 1" class="goods-image-default">
+                        <img src="images/goods_tape02.webp" alt="商品範例 1 - 懸停" class="goods-image-hover">
+                    </div>
+                    <!-- Goods Item 5 -->
+                    <div class="goods-item">
+                        <img src="images/goods_tape01.webp" alt="商品範例 2" class="goods-image-default">
+                        <img src="images/goods_tape02.webp" alt="商品範例 2 - 懸停" class="goods-image-hover">
+                    </div>
+                    <!-- Goods Item 6 -->
+                    <div class="goods-item">
+                        <img src="images/goods_tape01.webp" alt="商品範例 3" class="goods-image-default">
+                        <img src="images/goods_tape02.webp" alt="商品範例 3 - 懸停" class="goods-image-hover">
+                    </div>
+                </div>
+                <div class="goods-cta-container">
+                    <p class="goods-cta-text">挑選專鼠療癒小物</p>
+                    <a href="#" class="btn btn-capsule btn-lake-green">點我進入商店</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="link" class="content-section">
+            <div class="container">
+                <h1>相關連結</h1>
+                <div class="link-buttons-container">
+                    <a href="#" class="link-button">暫代按鈕</a>
+                    <a href="#" class="link-button">暫代按鈕</a>
+                    <a href="#" class="link-button">暫代按鈕</a>
+                    <a href="#" class="link-button">暫代按鈕</a>
                 </div>
             </div>
         </section>
@@ -577,6 +816,46 @@
                 copyrightElement.textContent = `© Copyright 鼠鼠盒子 MICEBOX ${currentYear}`;
             }
 
+            // --- Brand Intro Carousel Logic ---
+            const setupBrandCarousel = () => {
+                const carouselTrack = document.querySelector('#brand-intro .carousel-track');
+                if (!carouselTrack) return;
+
+                // A list of 'goods_' images. We'll repeat them to get to 5.
+                // This simulates "automatically fetching" them from the file system.
+                const goodsImages = [
+                    'goods_tape01.webp',
+                    'goods_tape02.webp',
+                    'goods_fugure.webp'
+                ];
+
+                const imagesToDisplay = [];
+                const totalSlides = 5; // We want to display 5 images at a time
+                for (let i = 0; i < totalSlides; i++) {
+                    imagesToDisplay.push(goodsImages[i % goodsImages.length]);
+                }
+
+                // Use a DocumentFragment for better performance when adding many elements
+                const fragment = document.createDocumentFragment();
+
+                const createSlide = (imageName, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    const img = document.createElement('img');
+                    img.src = `images/${imageName}`;
+                    img.alt = `商品圖片 ${index + 1}`; // Use more descriptive alt text
+                    slide.appendChild(img);
+                    return slide;
+                };
+
+                // Append original slides and their duplicates for the seamless loop
+                imagesToDisplay.forEach((name, i) => fragment.appendChild(createSlide(name, i)));
+                imagesToDisplay.forEach((name, i) => fragment.appendChild(createSlide(name, i)));
+                
+                carouselTrack.appendChild(fragment);
+            };
+            setupBrandCarousel();
+
             // --- 視差滾動效果 ---
             const brandIntroSection = document.querySelector('#brand-intro'); // 獲取品牌介紹區塊
             const characterIntroSection = document.querySelector('#character-intro');
@@ -585,6 +864,7 @@
             // 獲取角色介紹區塊中所有需要淡入的元素（標題和卡片）
             const characterIntroElements = characterIntroSection.querySelectorAll('.content-box, .character-cards-container');
 
+            /* Parallax scrolling effect disabled
             window.addEventListener('scroll', () => {
                 const scrollY = window.scrollY;
                 const brandTop = brandIntroSection.offsetTop;
@@ -672,6 +952,7 @@
                     el.style.opacity = charFadeProgress;
                 });
             });
+            */
 
             // --- Gallery Section Logic ---
             const setupGallery = () => {
